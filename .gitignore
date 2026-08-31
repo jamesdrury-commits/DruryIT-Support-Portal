@@ -5,6 +5,7 @@ server_support/config.php
 *.pem
 *.key
 *.pfx
+current_code/DruryITSupportTraySetup.exe
 
 # Build artifacts and local OS/editor files
 bin/
