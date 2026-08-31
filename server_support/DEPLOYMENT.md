@@ -37,6 +37,20 @@ Support tickets are addressed to `james@druryit.com` and sent from `support@drur
 
 Ticket records and copied attachments are stored privately in `/volume1/homes/jdrury/.druryit-support/tickets`. Existing historical email-only requests are not imported; new submissions are recorded automatically.
 
+## Private customer profiles
+
+Customer data belongs in `/volume1/homes/jdrury/.druryit-support/customers`, not in the public `web` folder. Create one folder per customer and place a hand-maintained `customer.json` inside it. A starter file is included in `server_support/customers.example/acme-accounting/customer.json`.
+
+Each profile can include the company name, main contact details, a small `logo.png` (or JPG/GIF), match values for deployed `client_ids`, known computer names, Windows usernames, and individual contacts. New tickets are matched in that order: client ID, computer, then username. The resolved company/contact details are copied into the ticket record and included in the notification email. The ticket desk reads the current profile to display its logo.
+
+Add this private setting to `config.php` if it is not already present:
+
+```php
+'customers_dir' => '/volume1/homes/jdrury/.druryit-support/customers',
+```
+
+Keep secrets, passwords, and recovery codes out of customer profiles. Back up this private customer directory with the private ticket directory.
+
 ## Rollback
 
 1. In Cloudflare Zero Trust, remove only the `support.druryit.com` published application route from tunnel `druryit`.

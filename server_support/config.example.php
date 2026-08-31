@@ -13,6 +13,8 @@ return [
     // Generate a long random value before deployment. This is the private desk access key.
     'desk_key' => 'replace-with-a-long-random-access-key',
     'tickets_dir' => '/volume1/homes/jdrury/.druryit-support/tickets',
+    // Private customer folders. Keep contacts and logos outside web/.
+    'customers_dir' => '/volume1/homes/jdrury/.druryit-support/customers',
     'client_tokens' => [
         'REPLACE-WITH-THE-DEPLOYMENT-TOKEN' => ['client_id' => 'druryit-test', 'client_name' => 'DruryIT Test'],
     ],

@@ -1,0 +1,21 @@
+{
+  "id": "acme-accounting",
+  "name": "Acme Accounting",
+  "main_phone": "555-0100",
+  "support_email": "help@acme.example",
+  "logo": "logo.png",
+  "match": {
+    "client_ids": ["acme-accounting"],
+    "computers": ["ACME-FRONTDESK"],
+    "windows_users": ["acme\\reception"]
+  },
+  "contacts": [
+    {
+      "name": "Avery Example",
+      "email": "avery@acme.example",
+      "phone": "555-0101",
+      "windows_users": ["acme\\avery"],
+      "computers": ["ACME-AVERY"]
+    }
+  ]
+}

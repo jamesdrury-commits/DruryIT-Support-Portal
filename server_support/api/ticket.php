@@ -7,6 +7,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 require dirname(__DIR__) . '/lib/PHPMailer/src/Exception.php';
 require dirname(__DIR__) . '/lib/PHPMailer/src/PHPMailer.php';
 require dirname(__DIR__) . '/lib/PHPMailer/src/SMTP.php';
+require dirname(__DIR__) . '/lib/customers.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -191,9 +192,19 @@ $priority = trim((string) ($request['priority'] ?? 'Normal'));
 $bestTime = trim((string) ($request['bestTime'] ?? 'Any time'));
 $windows = trim((string) ($request['windowsVersion'] ?? ''));
 $submitted = trim((string) ($request['submittedAtLocal'] ?? ''));
+$customer = resolveCustomer(loadCustomerProfiles($config), $clientId, $computer, $user);
+$contact = $customer === null ? null : customerContact($customer, $computer, $user);
+$customerName = $customer === null ? '' : (string) $customer['name'];
+$contactName = $contact === null ? '' : (string) ($contact['name'] ?? '');
+$contactEmail = $contact === null ? '' : (string) ($contact['email'] ?? '');
+$contactPhone = $contact === null ? '' : (string) ($contact['phone'] ?? '');
 
 $body = "New DruryIT Support Request\n\n"
     . "Ticket: {$ticketId}\nClient: {$clientName}\nClient ID: {$clientId}\n"
+    . ($customerName === '' ? '' : "Customer: {$customerName}\n")
+    . ($contactName === '' ? '' : "Matched contact: {$contactName}\n")
+    . ($contactEmail === '' ? '' : "Contact email: {$contactEmail}\n")
+    . ($contactPhone === '' ? '' : "Contact phone: {$contactPhone}\n")
     . "User: {$user}\nComputer: {$computer}\nPriority: {$priority}\n"
     . "Best time to connect: {$bestTime}\nWindows: {$windows}\n"
     . "Submitted from client: {$submitted}\nReceived by server: " . gmdate('c') . "\n\n"
@@ -207,6 +218,11 @@ $ticket = [
     'email_status' => 'pending',
     'client_name' => $clientName,
     'client_id' => $clientId,
+    'customer_id' => $customer === null ? '' : (string) $customer['id'],
+    'customer_name' => $customerName,
+    'contact_name' => $contactName,
+    'contact_email' => $contactEmail,
+    'contact_phone' => $contactPhone,
     'computer' => $computer,
     'user' => $user,
     'priority' => $priority,
