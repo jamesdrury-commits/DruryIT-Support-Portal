@@ -1,0 +1,16 @@
+# Private server configuration and credentials
+server_support/config.php
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+
+# Build artifacts and local OS/editor files
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+Thumbs.db
+Desktop.ini

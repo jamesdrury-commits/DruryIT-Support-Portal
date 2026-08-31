@@ -1,0 +1,53 @@
+Project: DruryIT Support V1 — finish deployment
+
+Goal:
+Deploy the backend for the existing Windows support client at:
+https://support.druryit.com/api/ticket.php
+
+Current client behavior:
+- DruryITSupportSetup.exe already exists
+- sends HTTPS multipart POSTs
+- supports issue text, screenshots/files, urgency, preferred connection time
+- includes computer name + Windows username
+- SMTP credentials must never be stored in the client
+
+Infrastructure:
+- druryit.com is hosted on Synology NAS "DruSAN"
+- DruSAN LAN IP: 192.168.1.170
+- SSH user: jdrury
+- existing Cloudflare tunnel already serves druryit.com
+- tunnel token exists at /root/.cloudflared/druryit.token
+- desired hostname: support.druryit.com
+- interactive SSH from Omen to jdrury@DruSAN works with key auth
+- Cloudflare is authenticated in Chrome, but prefer CLI/config if possible
+
+Tasks:
+1. Inspect DruSAN and find the current Web Station document root / virtual host layout.
+2. Deploy the provided server code as a separate support app without changing unrelated druryit.com code.
+3. Expose:
+   - /health.php
+   - /api/ticket.php
+4. Use PHP + PHPMailer server-side for email.
+5. Keep SMTP secrets server-side only.
+6. Validate Bearer deployment token.
+7. Enforce attachment count/size/type limits.
+8. Generate ticket IDs and return JSON.
+9. Log minimal ticket metadata.
+10. Add support.druryit.com to the EXISTING Cloudflare tunnel.
+11. Preserve the existing druryit.com route.
+12. Test locally, then externally over HTTPS.
+
+Important:
+- Do not create a second tunnel unless necessary.
+- Do not guess SMTP credentials.
+- If SMTP config is missing, stop at that step and report exactly what is needed.
+- Do not break druryit.com.
+- Document exact paths/config changes and rollback steps.
+
+Validation:
+- https://support.druryit.com/health.php works
+- GET to ticket.php is rejected
+- bad token is rejected
+- valid ticket succeeds
+- screenshot arrives as email attachment
+- druryit.com remains healthy
